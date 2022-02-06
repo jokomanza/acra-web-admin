@@ -67,7 +67,7 @@
                             <tbody>
                                 @if ($applications->count() == 0)
                                     <tr>
-                                        <td colspan="5">No products to display.</td>
+                                        <td colspan="5">No Application to display.</td>
                                     </tr>
                                 @endif
 

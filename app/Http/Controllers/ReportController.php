@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class ReportController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
 
@@ -42,7 +43,7 @@ class ReportController extends Controller
                     'brand',
                     'phone_model',
                     DB::raw("count(*) as count"),
-                    DB::raw("SUBSTRING(created_at, 1, 10) as reported_at")
+                    DB::raw("SUBSTRING(coalesce(to_char(created_at, 'MM-DD-YYYY HH24:MI:SS'), ''), 1, 10) as reported_at")
                 ]
             )
             ->groupBy('exception')
@@ -88,6 +89,43 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required|string|exists:application,token',
+            'report_id' => 'required|string',
+            'app_version_code' => 'required|numeric',
+            'app_version_name' => 'required|string',
+            'package_name' => 'required|string',
+            'file_path' => 'required|string',
+            'phone_model' => 'required|string',
+            'brand' => 'required|string',
+            'product' => 'required|string',
+            'android_version' => 'required|string',
+            'build' => 'required|nullable',
+            'total_mem_size' => 'required|string',
+            'available_mem_size' => 'required|string',
+            'build_config' => 'required|nullable',
+            'custom_data.*' => 'required',
+            'is_silent' => 'required|boolean',
+            'stack_trace' => 'required|string',
+            'exception' => 'required|string',
+            'initial_configuration' => 'required',
+            'crash_configuration' => 'required',
+            'display' => 'required',
+            'user_comment' => 'nullable|string',
+            'user_email' => 'required|string',
+            'user_app_start_date' => 'required|string',
+            'user_crash_date' => 'required|string',
+            'dumpsys_meminfo' => 'nullable|string',
+            'logcat' => 'required|string',
+            'installation_id' => 'required|string',
+            'device_features' => 'required',
+            'environment' => 'required|nullable',
+            'shared_preferences' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
 
         $data = $this->array_change_key_case_recursive($request->all());
 
@@ -101,7 +139,9 @@ class ReportController extends Controller
 
         $crash = new Report();
         $crash->fill($data);
-        $crash->application_id = 1;
+
+        $app = Application::where('token', $request->token)->first();
+        $crash->application_id = $app->id;
 
         $crash->save();
 
