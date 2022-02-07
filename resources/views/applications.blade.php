@@ -85,8 +85,11 @@
                                             {{-- <a class="btn btn-sm btn-success"
                                             href="{{ action('ApplicationController@edit', ['id' => $product->id]) }}">Edit</a> --}}
 
-                                            <a href="#" data-id={{ $product->id }} class="btn btn-sm btn-danger delete"
-                                                data-toggle="modal" data-target="#deleteModal">Delete</a>
+                                            {{-- <a href="#" data-id={{ $product->id }} class="btn btn-sm btn-primary"
+                                                data-toggle="modal" data-target="#deleteModal">View</a> --}}
+
+                                            <a href="{{ url('/application/' . $product->id) }}"
+                                                data-id={{ $product->id }} class="btn btn-sm btn-primary">View</a>
                                         </td>
                                     </tr>
                                 @endforeach

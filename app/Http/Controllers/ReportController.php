@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReportMail;
 use App\Models\Application;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
@@ -33,31 +36,34 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        $data = Report::query()
-            ->select(
-                [
-                    DB::raw('DISTINCT exception'),
-                    'package_name', 'app_version_code',
-                    'brand',
-                    'phone_model',
-                    DB::raw("count(*) as count"),
-                    DB::raw("SUBSTRING(coalesce(to_char(created_at, 'MM-DD-YYYY HH24:MI:SS'), ''), 1, 10) as reported_at")
-                ]
-            )
-            ->groupBy('exception')
-            ->groupBy('package_name')
-            ->groupBy('app_version_code')
-            ->groupBy('brand')
-            ->groupBy('phone_model')
-            // ->groupBy('count')
-            ->groupBy('reported_at')
-            ->get();
-        // return response($data);
-        // $data = $data->paginate(5);
+        // $data = Report::query()
+        //     ->select(
+        //         [
+        //             DB::raw('DISTINCT exception'),
+        //             'package_name', 'app_version_code',
+        //             'brand',
+        //             'phone_model',
+        //             DB::raw("count(*) as count"),
+        //             DB::raw("SUBSTRING(coalesce(to_char(created_at, 'MM-DD-YYYY HH24:MI:SS'), ''), 1, 10) as reported_at")
+        //         ]
+        //     )
+        //     ->groupBy('exception')
+        //     ->groupBy('package_name')
+        //     ->groupBy('app_version_code')
+        //     ->groupBy('brand')
+        //     ->groupBy('phone_model')
+        //     // ->groupBy('count')
+        //     ->groupBy('reported_at')
+        //     ->get();
+        // // return response($data);
+        // // $data = $data->paginate(5);
 
-        return view('reports')->with('data', $data);
+        $app = Application::find($id);
+        $data = Report::where('application_id', $id)->orderBy('created_at', 'DESC')->paginate(10);
+
+        return view('reports')->with('data', $data)->with('app', $app);
     }
 
     /**
@@ -89,8 +95,23 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'token' => 'required|string|exists:application,token',
+
+
+        $package = $request->getUser();
+        $token = $request->getPassword();
+
+        // $app = Application::where(['package_name' => $package, 'token' => $token])->first();
+        $app = Application::where(['token' => $token])->first();
+
+        if ($app == null) {
+            return unauthenticated('Username or token invalid');
+        }
+
+        $data = $this->array_change_key_case_recursive($request->all());
+
+        // Storage::disk('local')->put('content.json', json_encode($data));
+
+        $validator = Validator::make($data, [
             'report_id' => 'required|string',
             'app_version_code' => 'required|numeric',
             'app_version_name' => 'required|string',
@@ -101,13 +122,12 @@ class ReportController extends Controller
             'product' => 'required|string',
             'android_version' => 'required|string',
             'build' => 'required|nullable',
-            'total_mem_size' => 'required|string',
-            'available_mem_size' => 'required|string',
+            'total_mem_size' => 'required',
+            'available_mem_size' => 'required',
             'build_config' => 'required|nullable',
-            'custom_data.*' => 'required',
+            'custom_data' => 'nullable',
             'is_silent' => 'required|boolean',
             'stack_trace' => 'required|string',
-            'exception' => 'required|string',
             'initial_configuration' => 'required',
             'crash_configuration' => 'required',
             'display' => 'required',
@@ -124,10 +144,9 @@ class ReportController extends Controller
         ]);
 
         if ($validator->fails()) {
+            // Storage::disk('local')->put('error.json', json_encode($validator->messages()));
             return response()->json($validator->messages(), 400);
         }
-
-        $data = $this->array_change_key_case_recursive($request->all());
 
         $stacktrace = explode(PHP_EOL, $data['stack_trace']);
         foreach ($stacktrace as $line) {
@@ -140,10 +159,11 @@ class ReportController extends Controller
         $crash = new Report();
         $crash->fill($data);
 
-        $app = Application::where('token', $request->token)->first();
         $crash->application_id = $app->id;
 
         $crash->save();
+
+        Mail::to('joko_supriyanto@quick.com')->send(new ReportMail($crash));
 
         return response()->json($request->all(), 200);
     }
@@ -218,9 +238,15 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($report_id)
     {
-        //
+        $data = Report::where([
+            'report_id' => $report_id
+        ])->first();
+
+        // return response($data);
+
+        return view('report.detail')->with('data', $data);
     }
 
     /**

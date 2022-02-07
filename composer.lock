@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a817f5c23fe57522dea7a8b408563ee",
+    "content-hash": "5f75c400f56c3d7d367185f4637e05c3",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -2171,6 +2171,46 @@
     ],
     "packages-dev": [
         {
+            "name": "dees040/laravel-api-responses",
+            "version": "0.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dees040/laravel-api-responses.git",
+                "reference": "9c92073f36d7507943e277a0912d844f5f9b00d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dees040/laravel-api-responses/zipball/9c92073f36d7507943e277a0912d844f5f9b00d8",
+                "reference": "9c92073f36d7507943e277a0912d844f5f9b00d8",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "~5.0|~6.0|~7.0|~8.0",
+                "illuminate/routing": "~5.0|~6.0|~7.0|~8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "responses.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "dees040",
+                    "email": "d.oomens@hotmail.nl"
+                }
+            ],
+            "description": "Helper methods for Laravel API Responses",
+            "time": "2020-09-14T11:47:49+00:00"
+        },
+        {
             "name": "doctrine/annotations",
             "version": "v1.4.0",
             "source": {
@@ -2712,11 +2752,11 @@
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "hamcrest"
-                ],
                 "files": [
                     "hamcrest/Hamcrest.php"
+                ],
+                "classmap": [
+                    "hamcrest"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",

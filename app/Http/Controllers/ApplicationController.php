@@ -95,7 +95,13 @@ class ApplicationController extends Controller
      */
     public function show($id)
     {
-        //
+        $app = Application::find($id);
+
+        if ($app == null) {
+            return view('home');
+        }
+
+        return view('application')->with('data', $app);
     }
 
     /**

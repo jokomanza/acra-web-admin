@@ -4,7 +4,8 @@
     <div class="container">
         <div class="row">
             <div class="panel panel-primary">
-                <div class="panel-heading">Reports</div>
+                <a href="{{ url()->previous() }}" class="btn btn-default hide">Back</a>
+                <div class="panel-heading">Reports for {{ $app->name }} ({{ $app->package_name }})</div>
 
                 <div class="panel-body">
 
@@ -12,12 +13,12 @@
                         <table id="dataTable" class="table table-responsive table-bordered table-hover mb-0"
                             style="overflow-x: auto;">
                             <thead>
-                                <th>Exception</th>
-                                <th>Application</th>
+                                <th>Date</th>
+                                <th>App Version</th>
+                                <th>Android Version</th>
                                 <th>Device</th>
-                                <th>Crash Count</th>
-                                <th>Reported On</th>
-                                <th>Action</th>
+                                <th>Exception</th>
+                                <th>Delete</th>
                             </thead>
                             <tbody>
                                 @if ($data->count() == 0)
@@ -29,20 +30,26 @@
                                 @foreach ($data as $report)
                                     <tr>
                                         <td>
-                                            <a class="text-danger"
-                                                href="{{ url('/report?package_name=' .$report->package_name .'&app_version_code=' .$report->app_version_code .'&brand=' .$report->brand .'&phone_model=' .$report->phone_model .'&exception=' .$report->exception) }}">{{ $report->exception }}</a>
+                                            {{ $report->created_at->diffForHumans() }}
                                         </td>
-                                        <td>{{ $report->package_name }}</td>
-                                        <td>{{ strtoupper($report->brand) . ' ' . $report->phone_model }}</td>
-                                        <td>{{ $report->count }}</td>
-                                        <td>{{ $report->reported_at }}</td>
                                         <td>
-                                            <a href="#" data-id={{ $report->id }}
-                                                data-package={{ $report->package_name }}
-                                                data-version={{ $report->app_version_code }}
-                                                data-exception={{ $report->exception }}
-                                                class="btn btn-sm btn-danger delete" data-toggle="modal"
-                                                data-target="#deleteReportsModal">Delete</a>
+                                            {{ $report->app_version_name }}
+                                        </td>
+                                        <td>
+                                            {{ $report->android_version }}
+                                        </td>
+                                        <td>
+                                            {{ $report->brand . ' ' . $report->phone_model }}
+                                        </td>
+                                        <td>
+                                            <a class="text-danger"
+                                                href="{{ url('/report/' .$report->report_id) }}">{{ $report->exception }}</a>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-trash"></i>
+                                            {{-- <i href="#" data-id={{ $report->id }}
+                                                class="fas trash-alt" data-toggle="modal"
+                                                data-target="#deleteReportsModal">Delete</i> --}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -85,6 +92,9 @@
         $(document).ready(function() {
             $(document).on('click', '.delete', function() {
                 let id = $(this).attr('data-id')
+                let id = $(this).attr('data-package')
+                let id = $(this).attr('data-version')
+                let id = $(this).attr('data-exception')
                 console.log(id)
                 $('#id').val(id)
             })

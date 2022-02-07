@@ -58,9 +58,9 @@
                         <li class="nav-item {{ Route::is('application.index') ? 'active' : '' }}">
                             <a class="nav-link" href="{{ url('/applications') }}">Application</a>
                         </li>
-                        <li class="nav-item {{ Route::is('reports') ? 'active' : '' }}">
+                        {{-- <li class="nav-item {{ Route::is('reports') ? 'active' : '' }}">
                             <a class="nav-link" href="{{ url('/reports') }}">Reports</a>
-                        </li>
+                        </li> --}}
                     </ul>
 
                     <!-- Right Side Of Navbar -->

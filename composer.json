@@ -13,7 +13,8 @@
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~5.7",
-        "reliese/laravel": "^0.0.19"
+        "reliese/laravel": "^0.0.19",
+        "dees040/laravel-api-responses": "^0.2.6"
     },
     "autoload": {
         "classmap": [
