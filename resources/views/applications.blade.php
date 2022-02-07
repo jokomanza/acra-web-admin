@@ -47,6 +47,11 @@
                             {{ session()->get('table-message') }}
                         </div>
                     @endif
+                    @if (session()->has('table-error'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('table-error') }}
+                        </div>
+                    @endif
                     <div class="" style="margin-bottom: 1.5rem">
                         <form action="{{ route('application.index') }}" class="mb-1" method="GET" role="search">
 

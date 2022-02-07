@@ -42,7 +42,7 @@
                                                 data-version={{ $report->app_version_code }}
                                                 data-exception={{ $report->exception }}
                                                 class="btn btn-sm btn-danger delete" data-toggle="modal"
-                                                data-target="#deleteModal">Delete</a>
+                                                data-target="#deleteReportsModal">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -55,7 +55,7 @@
             </div>
         </div>
         <!-- Delete Warning Modal -->
-        <div class="modal modal-danger fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="Delete"
+        <div class="modal modal-danger fade" id="deleteReportsModal" tabindex="-1" role="dialog" aria-labelledby="Delete"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

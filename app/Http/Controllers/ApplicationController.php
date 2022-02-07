@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use Error;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -55,8 +57,8 @@ class ApplicationController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:application,name|string|min:3|max:20',
-            'package_name' => 'required|unique:application,package_name|string',
+            'name' => 'required|unique:application,name|min:3|max:20',
+            'package_name' => 'required|unique:application,package_name|string|regex:/com.[a-z]{3,20}.[a-z]{3,20}$/',
         ]);
 
         if ($validator->fails()) {
@@ -71,7 +73,7 @@ class ApplicationController extends Controller
 
         $app = new Application();
         $app->fill($request->all());
-        $app->token = str_random();
+        $app->token = str_random(36);
 
         try {
             $app->save();
@@ -134,11 +136,17 @@ class ApplicationController extends Controller
 
         $app = Application::find($request->id);
 
+        if (!isset($app)) {
+            return redirect()->route('application.index')
+                ->with('table-error', 'App with id ' . $request->id . ' not found, why you can do that?!');
+        }
+
         try {
             $app->delete();
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             return redirect()->route('application.index')
-                ->withErrors($th);
+                // ->with('table-error', $th->getMessage());
+                ->with('table-error', "Failed to delete the application, maybe this happens because there are still reports in this application, please check again, if you still can't, please contact the developers.");
         }
 
         return redirect()->route('application.index')

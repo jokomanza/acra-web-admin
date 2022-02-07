@@ -16,7 +16,7 @@
     <link href="{{ asset('DataTables/datatables.min.css') }}" rel="stylesheet">
 
     <script src="{{ asset('js/jquery.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('DataTables/datatables.min.js') }}" type="text/javascript"></script>
+    {{-- <script src="{{ asset('DataTables/datatables.min.js') }}" type="text/javascript"></script> --}}
 
     <!-- Latest compiled and minified CSS -->
     {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -100,7 +100,7 @@
     </div>
 
     <!-- Scripts Disable Temporary-->
-    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>
