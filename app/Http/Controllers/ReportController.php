@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ReportMail;
 use App\Models\Application;
+use App\Models\EmailRecipient;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -163,7 +164,9 @@ class ReportController extends Controller
 
         $crash->save();
 
-        Mail::to('joko_supriyanto@quick.com')->send(new ReportMail($crash));
+        $target = EmailRecipient::get(['email']);
+
+        Mail::to($target)->send(new ReportMail($crash));
 
         return response()->json($request->all(), 200);
     }
@@ -190,24 +193,6 @@ class ReportController extends Controller
         ])->paginate(5)->appends(request()->except('page'));
 
         return view('report', $request->all())->with('data', $data);
-    }
-
-    public function showDetail(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'report_id' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('reports');
-        }
-        $data = Report::where([
-            'report_id' => $request->report_id
-        ])->first();
-
-        // return response($data);
-
-        return view('report.detail', $data);
     }
 
     public function showFullReport($report_id)
@@ -244,8 +229,6 @@ class ReportController extends Controller
             'report_id' => $report_id
         ])->first();
 
-        // return response($data);
-
         return view('report.detail')->with('data', $data);
     }
 
@@ -278,8 +261,37 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        if (!$request->has('id')) {
+            return redirect()->route('application.index')
+                ->with('table-message', 'Application id not found');
+        }
+        
+        if (!$request->has('report_id')) {
+            return redirect()->route('report.index')
+                ->with('table-message', 'Report id not found');
+        }
+
+        $id = $request->id;
+        $report_id = $request->report_id;
+        
+        $report = Report::where('report_id', $report_id);
+
+        if (!isset($report)) {
+            return redirect()->route('report.index', ['id' => $id])
+                ->with('table-error', 'Report with id ' . $report_id . ' not found, why you can do that?!');
+        }
+
+        try {
+            $report->delete();
+        } catch (\Exception $th) {
+            return redirect()->route('report.index', ['id' => $id])
+                // ->with('table-error', $th->getMessage());
+                ->with('table-error', "Failed to delete this report");
+        }
+
+        return redirect()->route('report.index', ['id' => $id])
+            ->with('table-message', 'Report successfully deleted.');
     }
 }

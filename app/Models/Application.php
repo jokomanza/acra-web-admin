@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property character varying $name
  * @property character varying $package_name
  * @property character varying $token
- * @property timestamp without time zone|null $created_at
- * @property timestamp without time zone|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * 
  * @property Collection|Report[] $reports
  *
@@ -30,9 +30,7 @@ class Application extends Model
 	protected $casts = [
 		'name' => 'character varying',
 		'package_name' => 'character varying',
-		'token' => 'character varying',
-		'created_at' => 'timestamp without time zone',
-		'updated_at' => 'timestamp without time zone'
+		'token' => 'character varying'
 	];
 
 	protected $hidden = [

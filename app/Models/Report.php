@@ -43,8 +43,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $device_features
  * @property string $environment
  * @property string $shared_preferences
- * @property timestamp without time zone|null $created_at
- * @property timestamp without time zone|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * 
  * @property Application $application
  *
@@ -74,9 +74,7 @@ class Report extends Model
 		'user_app_start_date' => 'character varying',
 		'user_crash_date' => 'character varying',
 		'dumpsys_meminfo' => 'character varying',
-		'installation_id' => 'character varying',
-		'created_at' => 'timestamp without time zone',
-		'updated_at' => 'timestamp without time zone'
+		'installation_id' => 'character varying'
 	];
 
 	protected $fillable = [

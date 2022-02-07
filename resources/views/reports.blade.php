@@ -9,6 +9,17 @@
 
                 <div class="panel-body">
 
+                    @if (session()->has('table-message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('table-message') }}
+                        </div>
+                    @endif
+                    @if (session()->has('table-error'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('table-error') }}
+                        </div>
+                    @endif
+
                     <div class="table-responsive">
                         <table id="dataTable" class="table table-responsive table-bordered table-hover mb-0"
                             style="overflow-x: auto;">
@@ -46,10 +57,11 @@
                                                 href="{{ url('/report/' .$report->report_id) }}">{{ $report->exception }}</a>
                                         </td>
                                         <td>
-                                            <i class="fa fa-trash"></i>
-                                            {{-- <i href="#" data-id={{ $report->id }}
-                                                class="fas trash-alt" data-toggle="modal"
-                                                data-target="#deleteReportsModal">Delete</i> --}}
+                                            {{-- <i class="fa fa-trash"></i> --}}
+                                            <a href="#" data-id={{ $report->application_id }}
+                                                data-report-id={{ $report->report_id }}
+                                                class="button btn-sm btn-danger delete" data-toggle="modal"
+                                                data-target="#deleteReportsModal">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -57,7 +69,7 @@
                         </table>
                     </div>
 
-                    {{-- {{ $data->links() }} --}}
+                    {{ $data->links() }}
                 </div>
             </div>
         </div>
@@ -66,7 +78,7 @@
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form action="{{ url('/reports') }}" method="POST">
+                    <form action="{{ url('/report') }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
 
@@ -74,12 +86,13 @@
                             <h5 class="modal-title" id="exampleModalLabel">Delete Reports</h5>
                         </div>
                         <input type=hidden id="id" name="id">
+                        <input type=hidden id="report_id" name="report_id">
                         <div class="modal-body">
-                            <p>Are you sure want to delete it all ?</p>
+                            <p>Are you sure want to delete this Report ?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-sm btn-danger">Yes, Delete Application</button>
+                            <button type="submit" class="btn btn-sm btn-danger">Yes, Delete Report</button>
                         </div>
                     </form>
                 </div>
@@ -92,11 +105,9 @@
         $(document).ready(function() {
             $(document).on('click', '.delete', function() {
                 let id = $(this).attr('data-id')
-                let id = $(this).attr('data-package')
-                let id = $(this).attr('data-version')
-                let id = $(this).attr('data-exception')
-                console.log(id)
                 $('#id').val(id)
+                let reportId = $(this).attr('data-report-id')
+                $('#report_id').val(reportId)
             })
 
             $('#dataTable').DataTable({});

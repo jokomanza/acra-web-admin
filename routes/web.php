@@ -34,5 +34,13 @@ Route::get('/application/{id}/reports', 'ReportController@index')->name('report.
 
 Route::get('/report/{report_id}', 'ReportController@show')->name('report.show');
 
+Route::delete('/report', 'ReportController@destroy')->name('report.destroy');
+
 Route::get('/report/{report_id}/full', 'ReportController@showFullReport')->name('report.full');
+
+Route::get('/setting', 'SettingController@index')->name('setting.index');
+
+Route::post('/recipients/email', 'SettingController@store')->name('setting.store');
+
+Route::delete('/recipients/email', 'SettingController@destroy')->name('setting.destroy');
 
