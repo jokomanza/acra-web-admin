@@ -9,32 +9,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class PasswordReset
+ * Class EmailRecipient
  * 
  * @property character varying $email
- * @property character varying $token
- * @property timestamp without time zone|null $created_at
+ * @property character varying $name
  *
  * @package App\Models
  */
-class PasswordReset extends Model
+class EmailRecipient extends Model
 {
-	protected $table = 'password_resets';
+	protected $table = 'email_recipients';
+	protected $primaryKey = 'email';
 	public $incrementing = false;
 	public $timestamps = false;
 
 	protected $casts = [
 		'email' => 'character varying',
-		'token' => 'character varying',
-		'created_at' => 'timestamp without time zone'
-	];
-
-	protected $hidden = [
-		'token'
+		'name' => 'character varying'
 	];
 
 	protected $fillable = [
-		'email',
-		'token'
+		'name'
 	];
 }
