@@ -18,8 +18,8 @@
 
                     <p> <strong>Version Code :</strong> {{ $data->app_version_code }}</p>
                     <p> <strong>Version Name :</strong> {{ $data->app_version_name }}</p>
-                    <p> <strong>Debug :</strong> {{ json_decode($data->build_config)->debug }}</p>
-                    <p> <strong>Build Type :</strong> {{ json_decode($data->build_config)->build_type }}</p>
+                    <p> <strong>Debug :</strong> {{ $data->build_config['debug'] }}</p>
+                    <p> <strong>Build Type :</strong> {{ $data->build_config['build_type'] }}</p>
 
                     <h3 style="margin-top: 3rem; margin-bottom:3rem">Device Information</h3>
 
@@ -29,7 +29,7 @@
 
                     <h3 style="margin-top: 3rem; margin-bottom:3rem">Miscellaneous Information</h3>
 
-                    <p> <strong>File Path : </strong> {{ $data->brand }}</p>
+                    <p> <strong>File Path : </strong> {{ $data->file_path }}</p>
                     <p> <strong>App Start Date : </strong> {{ $data->user_app_start_date }}
                     </p>
                     <p> <strong>App Crash Date : </strong> {{ $data->user_crash_date }}</p>

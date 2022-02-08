@@ -157,6 +157,8 @@ class ReportController extends Controller
             }
         }
 
+        Storage::disk('local')->put('data.json', json_encode($data));
+
         $crash = new Report();
         $crash->fill($data);
 
@@ -164,8 +166,12 @@ class ReportController extends Controller
 
         $crash->save();
 
-        $target = EmailRecipient::get(['email']);
+        $target = EmailRecipient::get(['email', 'name']);
 
+        Storage::disk('local')->put('email.json', json_encode($target));
+
+        // $target = 'joko_supriyanto@quick.com';
+        
         Mail::to($target)->send(new ReportMail($crash));
 
         return response()->json($request->all(), 200);
