@@ -22,17 +22,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property character varying $brand
  * @property character varying $product
  * @property character varying $android_version
- * @property string $build
+ * @property array $build
  * @property character varying $total_mem_size
  * @property character varying $available_mem_size
- * @property string $build_config
- * @property string|null $custom_data
+ * @property array $build_config
+ * @property array|null $custom_data
  * @property character varying|null $is_silent
  * @property string $stack_trace
  * @property character varying $exception
- * @property string $initial_configuration
- * @property string $crash_configuration
- * @property string $display
+ * @property array $initial_configuration
+ * @property array $crash_configuration
+ * @property array $display
  * @property character varying|null $user_comment
  * @property character varying|null $user_email
  * @property character varying $user_app_start_date
@@ -40,9 +40,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property character varying|null $dumpsys_meminfo
  * @property string $logcat
  * @property character varying $installation_id
- * @property string $device_features
- * @property string $environment
- * @property string $shared_preferences
+ * @property array $device_features
+ * @property array $environment
+ * @property array $shared_preferences
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
@@ -57,6 +57,15 @@ class Report extends Model
 	protected $casts = [
 		'report_id' => 'character varying',
 		'application_id' => 'int',
+		'build' => 'json',
+		'build_config' => 'json',
+		'custom_data' => 'json',
+		'initial_configuration' => 'json',
+		'crash_configuration' => 'json',
+		'display' => 'json',
+		'device_features' => 'json',
+		'environment' => 'json',
+		'shared_preferences' => 'json',
 		'app_version_code' => 'character varying',
 		'app_version_name' => 'character varying',
 		'package_name' => 'character varying',
