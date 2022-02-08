@@ -29,7 +29,7 @@
                     <a class="btn btn-sm btn-success"
                         href="{{ url('/application', ['id' => $data->id]) }}">Edit</a>
 
-                    <a href="#" data-id={{ $data->id }} class="btn btn-sm btn-danger" data-toggle="modal"
+                    <a href="#" data-id={{ $data->id }} class="btn btn-sm btn-danger delete" data-toggle="modal"
                         data-target="#deleteModal">Delete</a>
 
                     <a href="{{ url('/application/' . $data->id . '/reports') }}" class="btn btn-sm btn-primary" >See Reports</a>

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Report;
 use Error;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -147,13 +149,21 @@ class ApplicationController extends Controller
                 ->with('table-error', 'App with id ' . $request->id . ' not found, why you can do that?!');
         }
 
+        DB::beginTransaction();
+
         try {
+
+            // $app->reports->delete();
+
             $app->delete();
         } catch (\Exception $th) {
+            DB::rollback();
             return redirect()->route('application.index')
                 // ->with('table-error', $th->getMessage());
                 ->with('table-error', "Failed to delete the application, maybe this happens because there are still reports in this application, please check again, if you still can't, please contact the developers.");
         }
+
+        DB::commit();
 
         return redirect()->route('application.index')
             ->with('table-message', 'Application successfully deleted.');
