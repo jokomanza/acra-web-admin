@@ -47,3 +47,7 @@ Route::delete('/setting/recipients/email', 'SettingController@destroy')->name('s
 
 Route::get('/setting/logs', 'SettingController@showLogs')->name('setting.log');
 
+
+Route::any('/{page?}', function () {
+    return view('errors.404');
+})->where('page', '.*');
