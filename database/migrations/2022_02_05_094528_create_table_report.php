@@ -25,17 +25,17 @@ class CreateTableReport extends Migration
             $table->string('brand');
             $table->string('product');
             $table->string('android_version');
-            $table->json('build');
+            $table->string('build'); // json
             $table->string('total_mem_size');
             $table->string('available_mem_size');
-            $table->json('build_config');
-            $table->json('custom_data')->nullable();
+            $table->string('build_config'); // json
+            $table->string('custom_data')->nullable(); // json
             $table->string('is_silent')->nullable();
             $table->longText('stack_trace');
             $table->string('exception');
-            $table->json('initial_configuration');
-            $table->json('crash_configuration');
-            $table->json('display');
+            $table->string('initial_configuration'); // json
+            $table->string('crash_configuration'); // json
+            $table->string('display'); // json
             $table->string('user_comment')->nullable();
             $table->string('user_email')->nullable();
             $table->string('user_app_start_date');
@@ -43,9 +43,9 @@ class CreateTableReport extends Migration
             $table->string('dumpsys_meminfo')->nullable();
             $table->longText('logcat');
             $table->string('installation_id');
-            $table->json('device_features');
-            $table->json('environment');
-            $table->json('shared_preferences');
+            $table->string('device_features'); // json
+            $table->string('environment'); // json
+            $table->string('shared_preferences'); // json
             $table->timestamps();
 
             $table->foreign('application_id')
