@@ -5,6 +5,19 @@
     <div class="container">
         <div class="row">
             <div class="panel panel-primary">
+                <div class="panel-heading">General</div>
+
+                <div class="panel-body">
+                    
+                    <p class="title bold">Logs</p>
+                    <a href="{{ route('setting.log') }}">See application logs</a>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="panel panel-primary">
                 <div class="panel-heading">Email Report Recipients</div>
 
                 <div class="panel-body">

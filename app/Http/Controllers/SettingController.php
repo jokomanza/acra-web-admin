@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\EmailRecipient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class SettingController extends Controller
@@ -16,7 +18,7 @@ class SettingController extends Controller
     public function index()
     {
         $emails = EmailRecipient::paginate(5);
-        return view('setting')->with('emails', $emails);
+        return view('setting.main')->with('emails', $emails);
     }
 
     /**
@@ -77,6 +79,31 @@ class SettingController extends Controller
     public function show($id)
     {
         //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showLogs(Request $request)
+    {
+        $date = new Carbon($request->get('date', Carbon::now()));
+
+        $filePath = storage_path("logs/laravel-{$date->format('Y-m-d')}.log");
+
+        $data = [];
+
+        if (File::exists($filePath)) {
+            $data = [
+                'lastModified' => new Carbon(File::lastModified($filePath)),
+                'size' => File::size($filePath),
+                'file' => File::get($filePath)
+            ];
+        }
+
+        return view('setting.logs', compact('date', 'data'));
     }
 
     /**

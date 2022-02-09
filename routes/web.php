@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('home');
+    // return view('welcome');
 });
 
 Auth::routes();
@@ -40,7 +41,9 @@ Route::get('/report/{report_id}/full', 'ReportController@showFullReport')->name(
 
 Route::get('/setting', 'SettingController@index')->name('setting.index');
 
-Route::post('/recipients/email', 'SettingController@store')->name('setting.store');
+Route::post('/setting/recipients/email', 'SettingController@store')->name('setting.store');
 
-Route::delete('/recipients/email', 'SettingController@destroy')->name('setting.destroy');
+Route::delete('/setting/recipients/email', 'SettingController@destroy')->name('setting.destroy');
+
+Route::get('/setting/logs', 'SettingController@showLogs')->name('setting.log');
 
