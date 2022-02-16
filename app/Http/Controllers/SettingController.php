@@ -4,12 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\EmailRecipient;
 use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class SettingController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -97,7 +109,7 @@ class SettingController extends Controller
 
         if (File::exists($filePath)) {
             $data = [
-                'lastModified' => new Carbon(File::lastModified($filePath)),
+                'lastModified' => DateTime::createFromFormat("U", File::lastModified($filePath))->setTimezone(new DateTimeZone('Asia/Jakarta')),
                 'size' => File::size($filePath),
                 'file' => File::get($filePath)
             ];
