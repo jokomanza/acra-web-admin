@@ -13,6 +13,7 @@
                     <h2 class="mt-0 font-weight-bold" style="margin-top: 0px">Report #{{ $data->id }}</h2>
                     <p>Application name</p>
                     <p> {{ $data->package_name }}</p>
+                    <p> {{ $data->is_silent ? 'Silent Error' : 'Crash' }}</p>
 
                     <h3 style="margin-top: 3rem; margin-bottom:3rem">Application Information</h3>
 

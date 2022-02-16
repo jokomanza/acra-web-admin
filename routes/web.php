@@ -41,9 +41,9 @@ Route::get('/report/{report_id}/full', 'ReportController@showFullReport')->name(
 
 Route::get('/setting', 'SettingController@index')->name('setting.index');
 
-Route::post('/setting/recipients/email', 'SettingController@store')->name('setting.store');
+Route::post('/setting/recipients/email', 'SettingController@store')->name('setting.email.store');
 
-Route::delete('/setting/recipients/email', 'SettingController@destroy')->name('setting.destroy');
+Route::delete('/setting/recipients/email', 'SettingController@destroy')->name('setting.email.destroy');
 
 Route::get('/setting/logs', 'SettingController@showLogs')->name('setting.log');
 

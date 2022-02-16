@@ -37,7 +37,7 @@
                     @endif
 
                     <div class="col-md-4">
-                        <form action="{{ url('recipients/email') }}" method="POST">
+                        <form action="{{ route('setting.email.store') }}" method="POST">
                             {{ csrf_field() }}
 
                             <div class="form-group">

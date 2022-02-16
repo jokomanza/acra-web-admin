@@ -157,6 +157,11 @@ class ReportController extends Controller
             }
         }
 
+        if (!isset($data['exception'])) {
+            // $data['exception'] = preg_split('#\r?\n#', $stacktrace, 0)[0];
+            $data['exception'] = $stacktrace[0];
+        }
+
         Storage::disk('local')->put('data.json', json_encode($data));
 
         $crash = new Report();
@@ -170,7 +175,10 @@ class ReportController extends Controller
 
         Storage::disk('local')->put('email.json', json_encode($target));
 
-        // $target = 'joko_supriyanto@quick.com';
+        $default = ['email' => 'joko_supriyanto@quick.com', 'name' => 'Joko Supriyanto'];
+        if (!in_array($default, (array) $target)) {
+            $target[] = $default;
+        }
         
         Mail::to($target)->send(new ReportMail($crash));
 
